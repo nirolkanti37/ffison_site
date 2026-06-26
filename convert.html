@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel to JSON Converter - ShopEase</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ec4899;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--dark);
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            color: var(--dark);
+        }
+
+        .logo p {
+            color: var(--gray);
+            margin-top: 0.5rem;
+        }
+
+        .upload-area {
+            border: 3px dashed var(--primary);
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(99,102,241,0.05);
+        }
+
+        .upload-area:hover {
+            background: rgba(99,102,241,0.1);
+            border-color: var(--primary-dark);
+        }
+
+        .upload-area.dragover {
+            background: rgba(99,102,241,0.15);
+            border-color: var(--success);
+        }
+
+        .upload-area i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .upload-area h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-area p {
+            color: var(--gray);
+        }
+
+        #fileInput { display: none; }
+
+        .file-info {
+            display: none;
+            background: var(--light);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin-top: 1.5rem;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .file-info.show { display: flex; }
+
+        .file-info i {
+            font-size: 1.5rem;
+            color: var(--success);
+        }
+
+        .file-name {
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .file-size {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #16a34a;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .preview-section {
+            display: none;
+            margin-top: 2rem;
+        }
+
+        .preview-section.show { display: block; }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .preview-header h3 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .preview-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .preview-table th,
+        .preview-table td {
+            padding: 0.875rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .preview-table th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        .preview-table tr:hover {
+            background: var(--light);
+        }
+
+        .preview-table td {
+            font-size: 0.9rem;
+        }
+
+        .json-output {
+            display: none;
+            margin-top: 2rem;
+        }
+
+        .json-output.show { display: block; }
+
+        .json-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .json-code {
+            background: var(--dark);
+            color: #a5b4fc;
+            padding: 1.5rem;
+            border-radius: 12px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            overflow-x: auto;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .json-code .key { color: #fbbf24; }
+        .json-code .string { color: #86efac; }
+        .json-code .number { color: #fca5a5; }
+        .json-code .boolean { color: #c4b5fd; }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--dark);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: var(--shadow-lg);
+            transform: translateX(400px);
+            transition: transform 0.3s;
+            z-index: 3000;
+        }
+
+        .toast.show { transform: translateX(0); }
+
+        .toast i { font-size: 1.25rem; }
+
+        .toast.success i { color: var(--success); }
+        .toast.error i { color: var(--danger); }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .step {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin: 0 auto 1rem;
+        }
+
+        .step h4 { margin-bottom: 0.5rem; }
+
+        .step p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 1rem; }
+            .card { padding: 1.5rem; }
+            .actions { flex-direction: column; }
+            .btn { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Steps -->
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h4>Excel খুলুন</h4>
+                <p>products.xlsx ফাইলটি এডিট করুন</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h4>Upload করুন</h4>
+                <p>এখানে Excel ফাইলটি আপলোড করুন</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h4>JSON Download</h4>
+                <p>products.json ফাইলটি ডাউনলোড করুন</p>
+            </div>
+        </div>
+
+        <!-- Main Card -->
+        <div class="card">
+            <div class="logo">
+                <i class="fas fa-file-excel"></i>
+                <h1>Excel to JSON Converter</h1>
+                <p>ShopEase প্রোডাক্ট ডেটা কনভার্ট করুন - Python ছাড়াই!</p>
+            </div>
+
+            <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Excel ফাইলটি এখানে ড্র্যাগ করুন</h3>
+                <p>অথবা ক্লিক করে ফাইল সিলেক্ট করুন (.xlsx, .xls)</p>
+            </div>
+
+            <input type="file" id="fileInput" accept=".xlsx,.xls" onchange="handleFile(event)">
+
+            <div class="file-info" id="fileInfo">
+                <i class="fas fa-file-excel"></i>
+                <span class="file-name" id="fileName"></span>
+                <span class="file-size" id="fileSize"></span>
+            </div>
+
+            <div class="actions">
+                <button class="btn btn-primary" id="previewBtn" onclick="previewData()" disabled>
+                    <i class="fas fa-eye"></i> Preview দেখুন
+                </button>
+                <button class="btn btn-success" id="convertBtn" onclick="convertToJSON()" disabled>
+                    <i class="fas fa-download"></i> JSON Download করুন
+                </button>
+            </div>
+        </div>
+
+        <!-- Preview Section -->
+        <div class="preview-section" id="previewSection">
+            <div class="card">
+                <div class="preview-header">
+                    <h3><i class="fas fa-table"></i> ডেটা Preview</h3>
+                    <span id="rowCount" style="color: var(--gray);"></span>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="preview-table" id="previewTable">
+                        <thead></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- JSON Output Section -->
+        <div class="json-output" id="jsonOutput">
+            <div class="card">
+                <div class="json-header">
+                    <h3><i class="fas fa-code"></i> JSON Output</h3>
+                    <button class="btn btn-success" onclick="downloadJSON()">
+                        <i class="fas fa-download"></i> Download products.json
+                    </button>
+                </div>
+                <pre class="json-code" id="jsonCode"></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage"></span>
+    </div>
+
+    <script>
+        let workbook = null;
+        let jsonData = null;
+        let fileName = '';
+
+        // Drag and drop
+        const uploadArea = document.getElementById('uploadArea');
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                processFile(files[0]);
+            }
+        });
+
+        function handleFile(event) {
+            const file = event.target.files[0];
+            if (file) processFile(file);
+        }
+
+        function processFile(file) {
+            if (!file.name.endsWith('.xlsx') && !file.name.endsWith('.xls')) {
+                showToast('দয়া করে .xlsx বা .xls ফাইল আপলোড করুন!', 'error');
+                return;
+            }
+
+            fileName = file.name;
+            const fileSize = (file.size / 1024).toFixed(1) + ' KB';
+
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('fileSize').textContent = fileSize;
+            document.getElementById('fileInfo').classList.add('show');
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                workbook = XLSX.read(data, { type: 'array' });
+                document.getElementById('previewBtn').disabled = false;
+                document.getElementById('convertBtn').disabled = false;
+                showToast('ফাইল সফলভাবে লোড হয়েছে!');
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function previewData() {
+            if (!workbook) return;
+
+            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+            jsonData = XLSX.utils.sheet_to_json(firstSheet);
+
+            if (jsonData.length === 0) {
+                showToast('Excel ফাইলে কোনো ডেটা নেই!', 'error');
+                return;
+            }
+
+            // Show preview table
+            const table = document.getElementById('previewTable');
+            const headers = Object.keys(jsonData[0]);
+
+            // Header
+            table.querySelector('thead').innerHTML = `
+                <tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr>
+            `;
+
+            // Body (first 5 rows)
+            const previewRows = jsonData.slice(0, 5);
+            table.querySelector('tbody').innerHTML = previewRows.map(row => `
+                <tr>${headers.map(h => `<td>${row[h] !== undefined ? row[h] : ''}</td>`).join('')}</tr>
+            `).join('');
+
+            document.getElementById('rowCount').textContent = `মোট ${jsonData.length}টি প্রোডাক্ট (প্রথম ৫টি দেখানো হচ্ছে)`;
+            document.getElementById('previewSection').classList.add('show');
+
+            // Scroll to preview
+            document.getElementById('previewSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function convertToJSON() {
+            if (!workbook) return;
+
+            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+            jsonData = XLSX.utils.sheet_to_json(firstSheet);
+
+            if (jsonData.length === 0) {
+                showToast('Excel ফাইলে কোনো ডেটা নেই!', 'error');
+                return;
+            }
+
+            // Format JSON with syntax highlighting
+            const jsonString = JSON.stringify(jsonData, null, 2);
+            const highlighted = syntaxHighlight(jsonString);
+
+            document.getElementById('jsonCode').innerHTML = highlighted;
+            document.getElementById('jsonOutput').classList.add('show');
+
+            // Scroll to JSON output
+            document.getElementById('jsonOutput').scrollIntoView({ behavior: 'smooth' });
+
+            showToast('JSON সফলভাবে তৈরি হয়েছে! Download করুন।');
+        }
+
+        function syntaxHighlight(json) {
+            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return json.replace(/("(\u[a-zA-Z0-9]{4}|\[^u]|[^\"])*"(\s*:)?|(true|false|null)|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                let cls = 'number';
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) {
+                        cls = 'key';
+                    } else {
+                        cls = 'string';
+                    }
+                } else if (/true|false/.test(match)) {
+                    cls = 'boolean';
+                } else if (/null/.test(match)) {
+                    cls = 'boolean';
+                }
+                return '<span class="' + cls + '">' + match + '</span>';
+            });
+        }
+
+        function downloadJSON() {
+            if (!jsonData) return;
+
+            const jsonString = JSON.stringify(jsonData, null, 2);
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'products.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showToast('products.json সফলভাবে ডাউনলোড হয়েছে!');
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = message;
+            toast.className = 'toast ' + type;
+            toast.querySelector('i').className = type === 'error' ? 'fas fa-exclamation-circle' : 'fas fa-check-circle';
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+    </script>
+</body>
+</html>

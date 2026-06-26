@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopEase - Modern Online Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style_part1.css">
+    <link rel="stylesheet" href="style_part2.css">
+    <link rel="stylesheet" href="style_part3.css">
+    <link rel="stylesheet" href="style_part4.css">
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-inner">
+            <div class="top-bar-left">
+                <span><i class="fas fa-phone"></i> ০১৭১২-৩৪৫৬৭৮</span>
+                <span><i class="fas fa-envelope"></i> support@shopease.com</span>
+                <span><i class="fas fa-map-marker-alt"></i> ঢাকা, বাংলাদেশ</span>
+            </div>
+            <div class="top-bar-right">
+                <a href="#"><i class="fas fa-truck"></i> ট্র্যাক অর্ডার</a>
+                <a href="#"><i class="fas fa-question-circle"></i> সাহায্য</a>
+                <a href="#"><i class="fas fa-user"></i> লগইন / রেজিস্টার</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header class="main-header">
+        <div class="header-inner">
+            <a href="#" class="logo">
+                <div class="logo-icon"><i class="fas fa-shopping-bag"></i></div>
+                <span class="logo-text">ShopEase</span>
+            </a>
+
+            <div class="search-box">
+                <div class="search-box-inner">
+                    <select>
+                        <option>সব ক্যাটাগরি</option>
+                        <option>ইলেকট্রনিক্স</option>
+                        <option>ফ্যাশন</option>
+                        <option>হোম</option>
+                    </select>
+                    <input type="text" id="searchInput" placeholder="প্রোডাক্ট সার্চ করুন...">
+                    <button class="search-btn"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <button class="header-action-btn">
+                    <i class="far fa-heart"></i>
+                    <span>উইশলিস্ট</span>
+                    <span class="header-action-badge">3</span>
+                </button>
+                <button class="header-action-btn">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span>কম্পেয়ার</span>
+                </button>
+                <button class="cart-btn" onclick="toggleCart()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>কার্ট</span>
+                    <span class="cart-btn-price">৳<span id="cartTotalHeader">0</span></span>
+                    <span class="header-action-badge" id="cartCount">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Bar with Mega Menu -->
+    <nav class="nav-bar">
+        <div class="nav-bar-inner">
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()"><i class="fas fa-bars"></i></button>
+
+            <div class="categories-btn" onclick="toggleMegaMenu()">
+                <i class="fas fa-th-large"></i>
+                <span>সব ক্যাটাগরি</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+
+            <div class="nav-links" id="navLinks">
+                <a href="#" class="nav-link">হোম</a>
+                <a href="#" class="nav-link">শপ <i class="fas fa-chevron-down"></i></a>
+                <div class="nav-item">
+                    <a href="#" class="nav-link">ইলেকট্রনিক্স <i class="fas fa-chevron-down"></i></a>
+                    <div class="mega-menu">
+                        <div class="mega-menu-inner">
+                            <div class="mega-menu-sidebar">
+                                <div class="mega-menu-category active">
+                                    <i class="fas fa-mobile-alt"></i>
+                                    <span>মোবাইল</span>
+                                    <i class="fas fa-chevron-right arrow"></i>
+                                </div>
+                                <div class="mega-menu-category">
+                                    <i class="fas fa-laptop"></i>
+                                    <span>ল্যাপটপ</span>
+                                    <i class="fas fa-chevron-right arrow"></i>
+                                </div>
+                                <div class="mega-menu-category">
+                                    <i class="fas fa-headphones"></i>
+                                    <span>হেডফোন</span>
+                                    <i class="fas fa-chevron-right arrow"></i>
+                                </div>
+                                <div class="mega-menu-category">
+                                    <i class="fas fa-camera"></i>
+                                    <span>ক্যামেরা</span>
+                                    <i class="fas fa-chevron-right arrow"></i>
+                                </div>
+                                <div class="mega-menu-category">
+                                    <i class="fas fa-tv"></i>
+                                    <span>টিভি</span>
+                                    <i class="fas fa-chevron-right arrow"></i>
+                                </div>
+                                <div class="mega-menu-category">
+                                    <i class="fas fa-gamepad"></i>
+                                    <span>গেমিং</span>
+                                    <i class="fas fa-chevron-right arrow"></i>
+                                </div>
+                            </div>
+                            <div class="mega-menu-content">
+                                <div class="mega-menu-column">
+                                    <h4>স্মার্টফোন</h4>
+                                    <ul>
+                                        <li><a href="#"><i class="fas fa-chevron-right"></i> iPhone</a></li>
+                                        <li><a href="#"><i class="fas fa-chevron-right"></i> Samsung</a></li>
+                                        <li><a href="#"><i class="fas fa-chevron-right"></i> Xiaomi</a></li>
+                                        <li><a href="#"><i class="fas fa-chevron-right"></i> OnePlus</a></li>
+                                        <li><a href="#"><i class="fas fa-chevron-right"></i> Realme</a></li>
+                                    </ul>
+                                </div>
+                                <div class="mega-menu-column">
+                                    <h4>অ্যাকসেসরিজ</h4>
+                                    <ul>
+                                        <li><a href="#"><i class="fas fa-chevron-right"></i> চার্জার</a></li>
+                                        <li><a href="#"><i class="fas fa-chevron-right"></i> কেস কভার</a></li>
+                                        <li><a href="#"><i class="fas fa-chevron-right"></i> স্ক্রিন প্রোটেক্টর</a></li>
+                                        <li><a href="#"><i class="fas fa-chevron-right"></i> পাওয়ার ব্যাংক</a></li>
+                                        <li><a href="#"><i class="fas fa-chevron-right"></i> কেবল</a></li>
+                                    </ul>
+                                </div>
+                                <div class="mega-menu-column">
+                                    <h4>ব্র্যান্ড</h4>
+                                    <ul>
+                                        <li><a href="#"><i class="fas fa-chevron-right"></i> Apple</a></li>
+                                        <li><a href="#"><i class="fas fa-chevron-right"></i> Samsung</a></li>
+                                        <li><a href="#"><i class="fas fa-chevron-right"></i> Sony</a></li>
+                                        <li><a href="#"><i class="fas fa-chevron-right"></i> Bose</a></li>
+                                        <li><a href="#"><i class="fas fa-chevron-right"></i> JBL</a></li>
+                                    </ul>
+                                </div>
+                                <div class="mega-menu-banner">
+                                    <div>
+                                        <h3>🎉 বিশেষ ছাড়!</h3>
+                                        <p>সব ইলেকট্রনিক্স পণ্যে ৩০% পর্যন্ত ছাড়</p>
+                                    </div>
+                                    <a href="#" class="mega-menu-banner-btn">এখনই কিনুন <i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a href="#" class="nav-link">ফ্যাশন <i class="fas fa-chevron-down"></i></a>
+                <a href="#" class="nav-link">হোম <i class="fas fa-chevron-down"></i></a>
+                <a href="#" class="nav-link">ব্লগ</a>
+                <a href="#" class="nav-link">কন্টাক্ট</a>
+                <a href="#" class="nav-link" style="color: var(--accent);">ফ্ল্যাশ সেল <span class="nav-badge">Hot</span></a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Slider -->
+    <section class="hero-slider" id="heroSlider">
+        <div class="hero-slide active">
+            <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1200" alt="" class="hero-slide-bg">
+            <div class="hero-slide-overlay"></div>
+            <div class="hero-slide-content">
+                <div class="hero-slide-text">
+                    <div class="hero-tag"><i class="fas fa-bolt"></i> নতুন কালেকশন ২০২৬</div>
+                    <h1 class="hero-title">প্রিমিয়াম <span>হেডফোন</span></h1>
+                    <p class="hero-description">নয়েজ ক্যান্সেলেশন সহ প্রিমিয়াম ওয়্যারলেস হেডফোন। ৩০ ঘন্টা ব্যাটারি লাইফ!</p>
+                    <div class="hero-price">
+                        <span class="hero-price-current">৳২,৪৯৯</span>
+                        <span class="hero-price-original">৳৩,৪৯৯</span>
+                        <span class="hero-price-discount">-২৯%</span>
+                    </div>
+                    <div class="hero-buttons">
+                        <button class="hero-btn-primary" onclick="addToCart(1)"><i class="fas fa-cart-plus"></i> কিনুন</button>
+                        <button class="hero-btn-secondary"><i class="fas fa-eye"></i> ডিটেইলস</button>
+                    </div>
+                </div>
+                <div class="hero-slide-image">
+                    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500" alt="Headphones">
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-slide">
+            <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=1200" alt="" class="hero-slide-bg">
+            <div class="hero-slide-overlay"></div>
+            <div class="hero-slide-content">
+                <div class="hero-slide-text">
+                    <div class="hero-tag"><i class="fas fa-star"></i> বেস্টসেলার</div>
+                    <h1 class="hero-title">স্মার্ট <span>ওয়াচ</span></h1>
+                    <p class="hero-description">ফিটনেস ট্র্যাকিং, হার্ট রেট মনিটর এবং ৭ দিনের ব্যাটারি লাইফ!</p>
+                    <div class="hero-price">
+                        <span class="hero-price-current">৳৫,৯৯৯</span>
+                        <span class="hero-price-original">৳৭,৯৯৯</span>
+                        <span class="hero-price-discount">-২৫%</span>
+                    </div>
+                    <div class="hero-buttons">
+                        <button class="hero-btn-primary" onclick="addToCart(2)"><i class="fas fa-cart-plus"></i> কিনুন</button>
+                        <button class="hero-btn-secondary"><i class="fas fa-eye"></i> ডিটেইলস</button>
+                    </div>
+                </div>
+                <div class="hero-slide-image">
+                    <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500" alt="Smart Watch">
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-slide">
+            <img src="https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=1200" alt="" class="hero-slide-bg">
+            <div class="hero-slide-overlay"></div>
+            <div class="hero-slide-content">
+                <div class="hero-slide-text">
+                    <div class="hero-tag"><i class="fas fa-fire"></i> হট ডিল</div>
+                    <h1 class="hero-title">গেমিং <span>কীবোর্ড</span></h1>
+                    <p class="hero-description">RGB ব্যাকলিট মেকানিক্যাল কীবোর্ড ব্লু সুইচ সহ। গেমিং এর জন্য পারফেক্ট!</p>
+                    <div class="hero-price">
+                        <span class="hero-price-current">৳৪,৫৯৯</span>
+                        <span class="hero-price-original">৳৫,৯৯৯</span>
+                        <span class="hero-price-discount">-২৩%</span>
+                    </div>
+                    <div class="hero-buttons">
+                        <button class="hero-btn-primary" onclick="addToCart(5)"><i class="fas fa-cart-plus"></i> কিনুন</button>
+                        <button class="hero-btn-secondary"><i class="fas fa-eye"></i> ডিটেইলস</button>
+                    </div>
+                </div>
+                <div class="hero-slide-image">
+                    <img src="https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500" alt="Keyboard">
+                </div>
+            </div>
+        </div>
+
+        <div class="slider-controls">
+            <button class="slider-arrow" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
+            <div class="slider-dots">
+                <button class="slider-dot active" onclick="goToSlide(0)"></button>
+                <button class="slider-dot" onclick="goToSlide(1)"></button>
+                <button class="slider-dot" onclick="goToSlide(2)"></button>
+            </div>
+            <button class="slider-arrow" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div class="slider-progress" id="sliderProgress" style="width: 0%"></div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="section">
+        <div class="section-inner">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title"><i class="fas fa-th-large"></i> জনপ্রিয় ক্যাটাগরি</h2>
+                    <p class="section-subtitle">আপনার পছন্দের ক্যাটাগরি বেছে নিন</p>
+                </div>
+                <a href="#" class="view-all-btn">সব দেখুন <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="categories-grid">
+                <div class="category-card electronics">
+                    <div class="category-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <div class="category-name">ইলেকট্রনিক্স</div>
+                    <div class="category-count">১২৫+ প্রোডাক্ট</div>
+                </div>
+                <div class="category-card fashion">
+                    <div class="category-icon"><i class="fas fa-tshirt"></i></div>
+                    <div class="category-name">ফ্যাশন</div>
+                    <div class="category-count">৩২০+ প্রোডাক্ট</div>
+                </div>
+                <div class="category-card home">
+                    <div class="category-icon"><i class="fas fa-home"></i></div>
+                    <div class="category-name">হোম</div>
+                    <div class="category-count">১৫০+ প্রোডাক্ট</div>
+                </div>
+                <div class="category-card sports">
+                    <div class="category-icon"><i class="fas fa-running"></i></div>
+                    <div class="category-name">স্পোর্টস</div>
+                    <div class="category-count">৮৫+ প্রোডাক্ট</div>
+                </div>
+                <div class="category-card beauty">
+                    <div class="category-icon"><i class="fas fa-spa"></i></div>
+                    <div class="category-name">বিউটি</div>
+                    <div class="category-count">২০০+ প্রোডাক্ট</div>
+                </div>
+                <div class="category-card books">
+                    <div class="category-icon"><i class="fas fa-book"></i></div>
+                    <div class="category-name">বই</div>
+                    <div class="category-count">৫০০+ প্রোডাক্ট</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Flash Sale Section -->
+    <section class="flash-sale-section">
+        <div class="section-inner">
+            <div class="flash-sale-header">
+                <div class="flash-sale-title">
+                    <i class="fas fa-bolt"></i>
+                    <h2>ফ্ল্যাশ <span>সেল</span></h2>
+                </div>
+                <div class="countdown-timer">
+                    <span class="countdown-label">শেষ হতে বাকি:</span>
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="hours">০২</div>
+                        <div class="countdown-unit">ঘন্টা</div>
+                    </div>
+                    <span class="countdown-separator">:</span>
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="minutes">৩০</div>
+                        <div class="countdown-unit">মিনিট</div>
+                    </div>
+                    <span class="countdown-separator">:</span>
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="seconds">৪৫</div>
+                        <div class="countdown-unit">সেকেন্ড</div>
+                    </div>
+                </div>
+            </div>
+            <div class="flash-sale-products" id="flashSaleProducts"></div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="section">
+        <div class="section-inner">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title"><i class="fas fa-fire"></i> ফিচার্ড প্রোডাক্ট</h2>
+                    <p class="section-subtitle">আমাদের সেরা কালেকশন</p>
+                </div>
+                <a href="#" class="view-all-btn">সব দেখুন <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="products-grid" id="featuredProducts"></div>
+        </div>
+    </section>
+
+    <!-- Promo Banners -->
+    <section class="section" style="padding-top: 0;">
+        <div class="section-inner">
+            <div class="promo-banners">
+                <div class="promo-banner">
+                    <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600" alt="">
+                    <div class="promo-banner-overlay">
+                        <span class="promo-banner-tag">নতুন কালেকশন</span>
+                        <h3 class="promo-banner-title">স্মার্টফোন ডিল</h3>
+                        <p class="promo-banner-desc">সেরা ব্র্যান্ডে ৪০% পর্যন্ত ছাড়</p>
+                        <a href="#" class="promo-banner-btn">এখনই কিনুন <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="promo-banner">
+                    <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600" alt="">
+                    <div class="promo-banner-overlay">
+                        <span class="promo-banner-tag">ফ্যাশন সেল</span>
+                        <h3 class="promo-banner-title">স্টাইলিশ ফ্যাশন</h3>
+                        <p class="promo-banner-desc">নতুন ফ্যাশন কালেকশন ৫০% ছাড়ে</p>
+                        <a href="#" class="promo-banner-btn">এখনই কিনুন <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="promo-banner">
+                    <img src="https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=600" alt="">
+                    <div class="promo-banner-overlay">
+                        <span class="promo-banner-tag">হোম ডেকোর</span>
+                        <h3 class="promo-banner-title">হোম অফিস</h3>
+                        <p class="promo-banner-desc">আপনার ঘর সাজান সুন্দরভাবে</p>
+                        <a href="#" class="promo-banner-btn">এখনই কিনুন <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- New Arrivals -->
+    <section class="section" style="background: var(--white);">
+        <div class="section-inner">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title"><i class="fas fa-sparkles"></i> নতুন আগমন</h2>
+                    <p class="section-subtitle">সদ্য আসা নতুন প্রোডাক্ট</p>
+                </div>
+                <a href="#" class="view-all-btn">সব দেখুন <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="products-grid products-grid-5" id="newArrivals"></div>
+        </div>
+    </section>
+
+    <!-- Deal of the Day -->
+    <section class="section">
+        <div class="section-inner">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title"><i class="fas fa-stopwatch"></i> ডিল অফ দ্য ডে</h2>
+                    <p class="section-subtitle">আজকের সেরা ডিল মিস করবেন না!</p>
+                </div>
+            </div>
+            <div class="deal-of-day">
+                <div class="deal-image">
+                    <img src="https://images.unsplash.com/photo-1609592809794-8534f7d175d4?w=600" alt="Power Bank">
+                    <span class="deal-badge">-৪০%</span>
+                </div>
+                <div class="deal-content">
+                    <h3>পোর্টেবল পাওয়ার ব্যাংক ২০০০০mAh</h3>
+                    <div class="product-rating">
+                        <span class="stars">★★★★☆</span>
+                        <span class="rating-count">(১২৫ রিভিউ)</span>
+                    </div>
+                    <div class="deal-price">
+                        <span class="deal-price-current">৳১,৮৯৯</span>
+                        <span class="deal-price-original">৳২,৪৯৯</span>
+                    </div>
+                    <div class="deal-progress">
+                        <div class="deal-progress-header">
+                            <span>বিক্রি হচ্ছে দ্রুত!</span>
+                            <span>৭৫% বিক্রি হয়েছে</span>
+                        </div>
+                        <div class="deal-progress-bar">
+                            <div class="deal-progress-fill" style="width: 75%"></div>
+                        </div>
+                    </div>
+                    <div class="deal-countdown">
+                        <div class="countdown-item">
+                            <div class="countdown-value">০৫</div>
+                            <div class="countdown-unit">ঘন্টা</div>
+                        </div>
+                        <div class="countdown-item">
+                            <div class="countdown-value">৪২</div>
+                            <div class="countdown-unit">মিনিট</div>
+                        </div>
+                        <div class="countdown-item">
+                            <div class="countdown-value">১৮</div>
+                            <div class="countdown-unit">সেকেন্ড</div>
+                        </div>
+                    </div>
+                    <button class="deal-btn" onclick="addToCart(3)"><i class="fas fa-cart-plus"></i> এখনই কিনুন</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="section" style="background: var(--white);">
+        <div class="section-inner">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title"><i class="fas fa-comments"></i> কাস্টমার রিভিউ</h2>
+                    <p class="section-subtitle">আমাদের কাস্টমাররা কী বলেন</p>
+                </div>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">"</div>
+                    <p class="testimonial-text">অসাধারণ সার্ভিস! প্রোডাক্টের কোয়ালিটি অসাধারণ এবং ডেলিভারি খুব দ্রুত। আমি খুবই সন্তুষ্ট।</p>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="">
+                        <div class="testimonial-author-info">
+                            <h4>রাহিম আহমেদ</h4>
+                            <p>ঢাকা, বাংলাদেশ</p>
+                        </div>
+                        <div class="testimonial-rating">★★★★★</div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">"</div>
+                    <p class="testimonial-text">প্রাইস অনুযায়ী প্রোডাক্টের কোয়ালিটি দারুণ। কাস্টমার সাপোর্টও খুব ভালো। রিকমেন্ড করি!</p>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="">
+                        <div class="testimonial-author-info">
+                            <h4>সারা খাতুন</h4>
+                            <p>চট্টগ্রাম, বাংলাদেশ</p>
+                        </div>
+                        <div class="testimonial-rating">★★★★★</div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">"</div>
+                    <p class="testimonial-text">দ্বিতীয়বার অর্ডার করলাম। প্রতিবারই ভালো অভিজ্ঞতা। প্যাকেজিংও খুব সুন্দর ছিল।</p>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="">
+                        <div class="testimonial-author-info">
+                            <h4>করিম হোসেন</h4>
+                            <p>সিলেট, বাংলাদেশ</p>
+                        </div>
+                        <div class="testimonial-rating">★★★★☆</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brands -->
+    <section class="brands-section">
+        <div class="section-inner">
+            <div class="brands-slider">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple" class="brand-logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg" alt="Samsung" class="brand-logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg" alt="Nike" class="brand-logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/20/Adidas_Logo.svg" alt="Adidas" class="brand-logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Under_armour_logo.svg" alt="Under Armour" class="brand-logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Reebok_2019_logo.svg" alt="Reebok" class="brand-logo">
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter-section">
+        <div class="section-inner">
+            <div class="newsletter-inner">
+                <h2>নিউজলেটার সাবস্ক্রাইব করুন</h2>
+                <p>নতুন প্রোডাক্ট এবং বিশেষ অফার সবার আগে পেতে সাবস্ক্রাইব করুন</p>
+                <form class="newsletter-form" onsubmit="event.preventDefault(); showToast('সাবস্ক্রিপশন সফল!');">
+                    <input type="email" placeholder="আপনার ইমেইল ঠিকানা" required>
+                    <button type="submit"><i class="fas fa-paper-plane"></i> সাবস্ক্রাইব</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="section-inner">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3><i class="fas fa-shopping-bag"></i> ShopEase</h3>
+                    <p>আপনার বিশ্বস্ত অনলাইন শপিং পার্টনার। সেরা পণ্য, সেরা দামে। দ্রুত ডেলিভারি এবং ৭ দিনের রিটার্ন পলিসি।</p>
+                    <div class="footer-social">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>কুইক লিংক</h4>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> হোম</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> শপ</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> অফার</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> ব্লগ</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> কন্টাক্ট</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>কাস্টমার সার্ভিস</h4>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> মাই অ্যাকাউন্ট</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> অর্ডার ট্র্যাকিং</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> রিটার্ন পলিসি</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> শিপিং ইনফো</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>যোগাযোগ</h4>
+                    <ul class="footer-contact">
+                        <li><i class="fas fa-map-marker-alt"></i> <div>১২৩ শপিং সেন্টার, ঢাকা-১২০৫, বাংলাদেশ</div></li>
+                        <li><i class="fas fa-phone"></i> <div>০১৭১২-৩৪৫৬৭৮</div></li>
+                        <li><i class="fas fa-envelope"></i> <div>support@shopease.com</div></li>
+                        <li><i class="fas fa-clock"></i> <div>সোম-শনি: ৯টা - ৯টা</div></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© ২০২৬ ShopEase. সর্বস্বত্ব সংরক্ষিত।</p>
+                <div class="payment-methods">
+                    <span style="color: var(--gray-500); font-size: 0.85rem; margin-right: 1rem;">পেমেন্ট মেথড:</span>
+                    <span style="color: var(--gray-400);"><i class="fab fa-cc-visa fa-lg"></i></span>
+                    <span style="color: var(--gray-400);"><i class="fab fa-cc-mastercard fa-lg"></i></span>
+                    <span style="color: var(--gray-400);"><i class="fab fa-cc-paypal fa-lg"></i></span>
+                    <span style="color: var(--gray-400);"><i class="fas fa-money-bill-wave fa-lg"></i></span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h2><i class="fas fa-shopping-cart"></i> আপনার কার্ট</h2>
+            <button class="close-cart" onclick="toggleCart()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <div class="cart-empty">
+                <i class="fas fa-shopping-basket"></i>
+                <h3>কার্ট খালি</h3>
+                <p>কিছু প্রোডাক্ট যোগ করুন</p>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-summary">
+                <div class="cart-summary-row">
+                    <span>সাবটোটাল</span>
+                    <span id="cartSubtotal">৳০</span>
+                </div>
+                <div class="cart-summary-row discount">
+                    <span>ছাড়</span>
+                    <span>-৳০</span>
+                </div>
+                <div class="cart-summary-row">
+                    <span>ডেলিভারি</span>
+                    <span>ফ্রি</span>
+                </div>
+                <div class="cart-summary-row total">
+                    <span>মোট</span>
+                    <span id="cartTotal">৳০</span>
+                </div>
+            </div>
+            <button class="checkout-btn" onclick="checkout()"><i class="fas fa-credit-card"></i> অর্ডার করুন</button>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="backToTop" onclick="scrollToTop()"><i class="fas fa-chevron-up"></i></button>
+
+    <script src="script.js"></script>
+</body>
+</html>
