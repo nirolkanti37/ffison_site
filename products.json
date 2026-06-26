@@ -1,0 +1,98 @@
+[
+  {
+    "id": 1,
+    "name": "Wireless Bluetooth Headphones",
+    "price": 2499,
+    "original_price": 3499,
+    "category": "Electronics",
+    "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400",
+    "description": "Premium wireless headphones with noise cancellation and 30-hour battery life.",
+    "rating": 4.5,
+    "stock": 15,
+    "badge": "Bestseller"
+  },
+  {
+    "id": 2,
+    "name": "Smart Watch Pro",
+    "price": 5999,
+    "original_price": 7999,
+    "category": "Electronics",
+    "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400",
+    "description": "Advanced fitness tracking, heart rate monitor, and 7-day battery life.",
+    "rating": 4.8,
+    "stock": 8,
+    "badge": "New"
+  },
+  {
+    "id": 3,
+    "name": "Portable Power Bank 20000mAh",
+    "price": 1899,
+    "original_price": 2499,
+    "category": "Electronics",
+    "image": "https://images.unsplash.com/photo-1609592809794-8534f7d175d4?w=400",
+    "description": "High-capacity power bank with fast charging support for all devices.",
+    "rating": 4.3,
+    "stock": 25,
+    "badge": "Sale"
+  },
+  {
+    "id": 4,
+    "name": "LED Desk Lamp",
+    "price": 1299,
+    "original_price": 1999,
+    "category": "Home",
+    "image": "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400",
+    "description": "Modern LED desk lamp with adjustable brightness and color temperature.",
+    "rating": 4.6,
+    "stock": 12,
+    "badge": NaN
+  },
+  {
+    "id": 5,
+    "name": "Mechanical Keyboard RGB",
+    "price": 4599,
+    "original_price": 5999,
+    "category": "Electronics",
+    "image": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400",
+    "description": "RGB backlit mechanical keyboard with blue switches for gaming.",
+    "rating": 4.7,
+    "stock": 5,
+    "badge": "Hot"
+  },
+  {
+    "id": 6,
+    "name": "USB-C Hub 7-in-1",
+    "price": 3299,
+    "original_price": 4499,
+    "category": "Electronics",
+    "image": "https://images.unsplash.com/photo-1625723044792-44de16ccb4e9?w=400",
+    "description": "7-in-1 USB-C hub with HDMI, USB 3.0, SD card reader and more.",
+    "rating": 4.4,
+    "stock": 18,
+    "badge": "New"
+  },
+  {
+    "id": 7,
+    "name": "Wireless Mouse",
+    "price": 899,
+    "original_price": 1299,
+    "category": "Electronics",
+    "image": "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=400",
+    "description": "Ergonomic wireless mouse with precision tracking and long battery life.",
+    "rating": 4.2,
+    "stock": 30,
+    "badge": "Sale"
+  },
+  {
+    "id": 8,
+    "name": "Phone Stand Adjustable",
+    "price": 499,
+    "original_price": 799,
+    "category": "Accessories",
+    "image": "https://images.unsplash.com/photo-1586105251261-72a756497a11?w=400",
+    "description": "Adjustable phone stand compatible with all smartphones and tablets.",
+    "rating": 4.5,
+    "stock": 40,
+    "badge": NaN
+  }
+]
