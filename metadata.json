@@ -1,6 +1,0 @@
-{
-  "name": "Minimalist Fashion Site",
-  "description": "A high-end minimalist fashion e-commerce site with live design customization, a product detail viewer, and an AI Fashion Stylist.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
