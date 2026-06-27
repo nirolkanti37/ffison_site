@@ -457,7 +457,7 @@
       "COLOR": "#6366f1",
       "IMAGE": "https://images.unsplash.com/photo-1498049860654-af1a5c5668ba?w=400",
       "PRODUCT_COUNT": 125,
-      "DESCRIPTION": "All electronic gadgets",
+      "DESCRIPTION": "electronic",
       "SORT": 1,
       "FEATURED": "Yes",
       "MENU": "Yes",
@@ -472,7 +472,7 @@
       "COLOR": "#ec4899",
       "IMAGE": "https://images.unsplash.com/photo-1445205170230-053b83016050?w=400",
       "PRODUCT_COUNT": 320,
-      "DESCRIPTION": "Trendy fashion",
+      "DESCRIPTION": "fassion",
       "SORT": 2,
       "FEATURED": "Yes",
       "MENU": "Yes",
@@ -487,7 +487,7 @@
       "COLOR": "#f59e0b",
       "IMAGE": "https://images.unsplash.com/photo-1484101403633-562f891dc89a?w=400",
       "PRODUCT_COUNT": 150,
-      "DESCRIPTION": "Home essentials",
+      "DESCRIPTION": "home",
       "SORT": 3,
       "FEATURED": "Yes",
       "MENU": "Yes",
@@ -517,7 +517,7 @@
       "COLOR": "#8b5cf6",
       "IMAGE": "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400",
       "PRODUCT_COUNT": 200,
-      "DESCRIPTION": "Beauty products",
+      "DESCRIPTION": "bproduct of beauti",
       "SORT": 5,
       "FEATURED": "Yes",
       "MENU": "Yes",
@@ -551,7 +551,7 @@
       "SORT": 7,
       "FEATURED": "No",
       "MENU": "Yes",
-      "HOMEPAGE": "No",
+      "HOMEPAGE": "yes ",
       "STATUS": "Active"
     },
     {
@@ -566,7 +566,7 @@
       "SORT": 8,
       "FEATURED": "No",
       "MENU": "Yes",
-      "HOMEPAGE": "No",
+      "HOMEPAGE": "yes",
       "STATUS": "Active"
     },
     {
@@ -582,7 +582,7 @@
       "SORT": 9,
       "FEATURED": "No",
       "MENU": "Yes",
-      "HOMEPAGE": "No",
+      "HOMEPAGE": "yes",
       "STATUS": "Active"
     },
     {
@@ -597,7 +597,7 @@
       "SORT": 10,
       "FEATURED": "No",
       "MENU": "Yes",
-      "HOMEPAGE": "No",
+      "HOMEPAGE": "yes",
       "STATUS": "Active"
     }
   ],
