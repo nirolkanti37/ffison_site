@@ -1,346 +1,497 @@
-// ============================================
-// ShopEase Modern E-Commerce JavaScript
-// ============================================
+/* ============================================
+ ShopEase CMS - JSON Data Controller
+ Reads all site data from ShopEase_CMS_Data.json
+ ============================================ */
 
-// Global Variables
-let products = [];
-let cart = JSON.parse(localStorage.getItem('shopease_cart')) || [];
-let currentSlide = 0;
-let slideInterval;
-let countdownInterval;
-
-// Product Data (Fallback)
-const defaultProducts = [
-    { id: 1, name: "Wireless Bluetooth Headphones", price: 2499, original_price: 3499, category: "Electronics", image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400", description: "Premium wireless headphones with noise cancellation and 30-hour battery life.", rating: 4.5, stock: 15, badge: "Bestseller" },
-    { id: 2, name: "Smart Watch Pro", price: 5999, original_price: 7999, category: "Electronics", image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400", description: "Advanced fitness tracking, heart rate monitor, and 7-day battery life.", rating: 4.8, stock: 8, badge: "New" },
-    { id: 3, name: "Portable Power Bank 20000mAh", price: 1899, original_price: 2499, category: "Electronics", image: "https://images.unsplash.com/photo-1609592809794-8534f7d175d4?w=400", description: "High-capacity power bank with fast charging support for all devices.", rating: 4.3, stock: 25, badge: "Sale" },
-    { id: 4, name: "LED Desk Lamp", price: 1299, original_price: 1999, category: "Home", image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400", description: "Modern LED desk lamp with adjustable brightness and color temperature.", rating: 4.6, stock: 12, badge: "" },
-    { id: 5, name: "Mechanical Keyboard RGB", price: 4599, original_price: 5999, category: "Electronics", image: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400", description: "RGB backlit mechanical keyboard with blue switches for gaming.", rating: 4.7, stock: 5, badge: "Hot" },
-    { id: 6, name: "USB-C Hub 7-in-1", price: 3299, original_price: 4499, category: "Electronics", image: "https://images.unsplash.com/photo-1625723044792-44de16ccb4e9?w=400", description: "7-in-1 USB-C hub with HDMI, USB 3.0, SD card reader and more.", rating: 4.4, stock: 18, badge: "New" },
-    { id: 7, name: "Wireless Mouse", price: 899, original_price: 1299, category: "Electronics", image: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=400", description: "Ergonomic wireless mouse with precision tracking and long battery life.", rating: 4.2, stock: 30, badge: "Sale" },
-    { id: 8, name: "Phone Stand Adjustable", price: 499, original_price: 799, category: "Accessories", image: "https://images.unsplash.com/photo-1586105251261-72a756497a11?w=400", description: "Adjustable phone stand compatible with all smartphones and tablets.", rating: 4.5, stock: 40, badge: "" },
-    { id: 9, name: "Laptop Stand Aluminum", price: 1599, original_price: 2299, category: "Accessories", image: "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=400", description: "Premium aluminum laptop stand with adjustable height and angle.", rating: 4.6, stock: 20, badge: "New" },
-    { id: 10, name: "Webcam HD 1080p", price: 3499, original_price: 4999, category: "Electronics", image: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400", description: "Full HD webcam with built-in microphone for video calls and streaming.", rating: 4.4, stock: 15, badge: "Bestseller" }
-];
-
-// Initialize
-document.addEventListener('DOMContentLoaded', function() {
-    loadProducts();
-    initSlider();
-    initCountdown();
-    initScrollEffects();
-    updateCartUI();
-});
-
-// Load Products
-async function loadProducts() {
-    try {
-        const response = await fetch('products.json');
-        products = await response.json();
-    } catch (error) {
-        products = defaultProducts;
+class ShopEaseCMS {
+    constructor() {
+        this.data = null;
+        this.settings = {};
+        this.categories = [];
+        this.products = [];
+        this.heroSlides = [];
+        this.promoBanners = [];
+        this.testimonials = [];
+        this.pages = [];
+        this.navLinks = [];
     }
-    renderFeaturedProducts();
-    renderFlashSaleProducts();
-    renderNewArrivals();
+
+    async init() {
+        try {
+            const response = await fetch('ShopEase_CMS_Data.json');
+            this.data = await response.json();
+            this.parseData();
+            console.log('✅ ShopEase CMS loaded successfully');
+            return true;
+        } catch (error) {
+            console.error('❌ Failed to load CMS data:', error);
+            return false;
+        }
+    }
+
+    parseData() {
+        // Parse Settings into key-value pairs
+        if (this.data.Settings) {
+            this.data.Settings.forEach(item => {
+                if (item.KEY && item.VALUE !== undefined) {
+                    this.settings[item.KEY] = item.VALUE;
+                }
+            });
+        }
+
+        this.categories = this.data.Categories || [];
+        this.products = this.data.Products || [];
+        this.heroSlides = this.data['Hero Slides'] || [];
+        this.promoBanners = this.data['Promo Banners'] || [];
+        this.testimonials = this.data.Testimonials || [];
+        this.pages = this.data.Pages || [];
+        this.navLinks = this.data['Nav Links'] || [];
+    }
+
+    // ===== SETTINGS HELPERS =====
+    getSetting(key, defaultValue = '') {
+        return this.settings[key] !== undefined ? this.settings[key] : defaultValue;
+    }
+
+    getSiteName() { return this.getSetting('site_name', 'ShopEase'); }
+    getSiteTagline() { return this.getSetting('site_tagline', 'Modern Online Store'); }
+    getPhone() { return this.getSetting('phone', '01712-345678'); }
+    getEmail() { return this.getSetting('email', 'support@shopease.com'); }
+    getCurrencySymbol() { return this.getSetting('currency_symbol', '৳'); }
+    getPrimaryColor() { return this.getSetting('primary_color', '#6366f1'); }
+    getSecondaryColor() { return this.getSetting('secondary_color', '#ec4899'); }
+    getAccentColor() { return this.getSetting('accent_color', '#f59e0b'); }
+
+    isFeatureEnabled(key) {
+        return this.getSetting(key, 'No') === 'Yes';
+    }
+
+    // ===== CATEGORIES =====
+    getActiveCategories() {
+        return this.categories.filter(c => c.STATUS === 'Active');
+    }
+
+    getFeaturedCategories() {
+        return this.categories.filter(c => c.STATUS === 'Active' && c.FEATURED === 'Yes');
+    }
+
+    getMenuCategories() {
+        return this.categories.filter(c => c.STATUS === 'Active' && c.MENU === 'Yes');
+    }
+
+    getHomepageCategories() {
+        return this.categories.filter(c => c.STATUS === 'Active' && c.HOMEPAGE === 'Yes');
+    }
+
+    getCategoryBySlug(slug) {
+        return this.categories.find(c => c.SLUG === slug && c.STATUS === 'Active');
+    }
+
+    // ===== PRODUCTS =====
+    getActiveProducts() {
+        return this.products.filter(p => p.STATUS === 'Active');
+    }
+
+    getFeaturedProducts() {
+        return this.getActiveProducts().filter(p => p.FEATURED === 'Yes');
+    }
+
+    getNewArrivals() {
+        return this.getActiveProducts().filter(p => p.NEW === 'Yes');
+    }
+
+    getBestSellers() {
+        return this.getActiveProducts().filter(p => p.BESTSELLER === 'Yes');
+    }
+
+    getFlashSaleProducts() {
+        return this.getActiveProducts().filter(p => p.FLASH_SALE === 'Yes');
+    }
+
+    getProductsByCategory(categorySlug) {
+        return this.getActiveProducts().filter(p => p.CATEGORY === categorySlug);
+    }
+
+    getProductById(id) {
+        return this.products.find(p => p.ID == id && p.STATUS === 'Active');
+    }
+
+    getProductBySlug(slug) {
+        return this.products.find(p => p.SLUG === slug && p.STATUS === 'Active');
+    }
+
+    // ===== HERO SLIDES =====
+    getActiveHeroSlides() {
+        return this.heroSlides.filter(s => s.ACTIVE === 'Yes').sort((a, b) => a.SORT - b.SORT);
+    }
+
+    // ===== PROMO BANNERS =====
+    getActivePromoBanners() {
+        return this.promoBanners.filter(b => b.ACTIVE === 'Yes').sort((a, b) => a.SORT - b.SORT);
+    }
+
+    // ===== TESTIMONIALS =====
+    getActiveTestimonials() {
+        return this.testimonials.filter(t => t.ACTIVE === 'Yes').sort((a, b) => a.SORT - b.SORT);
+    }
+
+    // ===== PAGES (NEW) =====
+    getActivePages() {
+        return this.pages.filter(p => p.STATUS === 'Active');
+    }
+
+    getPageBySlug(slug) {
+        return this.pages.find(p => p.SLUG === slug && p.STATUS === 'Active');
+    }
+
+    getVisiblePages() {
+        return this.pages.filter(p => p.STATUS === 'Active' && p.IS_VISIBLE === 'Yes');
+    }
+
+    getFooterPages() {
+        return this.pages.filter(p => p.STATUS === 'Active' && p.SHOW_IN_FOOTER === 'Yes');
+    }
+
+    getHeaderPages() {
+        return this.pages.filter(p => p.STATUS === 'Active' && p.SHOW_IN_HEADER === 'Yes');
+    }
+
+    // ===== NAV LINKS (NEW) =====
+    getHeaderNavLinks() {
+        return this.navLinks.filter(l => l.POSITION === 'header' && l.IS_ACTIVE === 'Yes').sort((a, b) => a.SORT_ORDER - b.SORT_ORDER);
+    }
+
+    getFooterNavLinks() {
+        return this.navLinks.filter(l => l.POSITION === 'footer' && l.IS_ACTIVE === 'Yes').sort((a, b) => a.SORT_ORDER - b.SORT_ORDER);
+    }
+
+    getSocialLinks() {
+        return this.navLinks.filter(l => l.POSITION === 'social' && l.IS_ACTIVE === 'Yes').sort((a, b) => a.SORT_ORDER - b.SORT_ORDER);
+    }
+
+    // ===== PRICE FORMATTING =====
+    formatPrice(price) {
+        const symbol = this.getCurrencySymbol();
+        const decimal = parseInt(this.getSetting('decimal_places', 0));
+        const formatted = parseFloat(price).toFixed(decimal);
+        return `${symbol}${formatted}`;
+    }
+
+    // ===== THEME CSS VARIABLES =====
+    applyTheme() {
+        const root = document.documentElement;
+        root.style.setProperty('--primary', this.getPrimaryColor());
+        root.style.setProperty('--secondary', this.getSecondaryColor());
+        root.style.setProperty('--accent', this.getAccentColor());
+        root.style.setProperty('--success', this.getSetting('success_color', '#22c55e'));
+        root.style.setProperty('--danger', this.getSetting('danger_color', '#ef4444'));
+        root.style.setProperty('--warning', this.getSetting('warning_color', '#f59e0b'));
+        root.style.setProperty('--dark', this.getSetting('dark_color', '#0f172a'));
+        root.style.setProperty('--light', this.getSetting('light_color', '#f9fafb'));
+
+        const fontFamily = this.getSetting('font_family', 'Hind Siliguri');
+        root.style.setProperty('--font-sans', `'${fontFamily}', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif`);
+    }
 }
 
-// Render Product Card
-function createProductCard(product) {
-    const discount = Math.round(((product.original_price - product.price) / product.original_price) * 100);
-    const stars = '★'.repeat(Math.floor(product.rating)) + '☆'.repeat(5 - Math.floor(product.rating));
-    const stockPercent = (product.stock / 50) * 100;
-    const stockClass = product.stock <= 5 ? 'low' : '';
+// Global instance
+const cms = new ShopEaseCMS();
 
-    return `
-        <div class="product-card" data-id="${product.id}">
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', async () => {
+    await cms.init();
+    cms.applyTheme();
+
+    // Update site title
+    document.title = cms.getSiteName();
+
+    // Update logo text
+    const logoText = document.querySelector('.logo-text');
+    if (logoText) logoText.textContent = cms.getSiteName();
+
+    // Update contact info
+    const phoneEl = document.querySelector('.top-bar-phone');
+    if (phoneEl) phoneEl.textContent = cms.getPhone();
+
+    const emailEl = document.querySelector('.top-bar-email');
+    if (emailEl) emailEl.textContent = cms.getEmail();
+
+    // Load dynamic content
+    loadNavLinks();
+    loadHeroSlides();
+    loadCategories();
+    loadProducts();
+    loadPromoBanners();
+    loadTestimonials();
+    loadFooterPages();
+    loadSocialLinks();
+});
+
+// ===== NAV LINKS =====
+function loadNavLinks() {
+    const headerLinks = cms.getHeaderNavLinks();
+    const navContainer = document.querySelector('.nav-links');
+    if (navContainer) {
+        navContainer.innerHTML = headerLinks.map(link => `
+            <a href="${link.URL}" class="nav-link" ${link.TARGET === '_blank' ? 'target="_blank"' : ''}>
+                ${link.ICON ? `<i class="fas ${link.ICON}"></i>` : ''}
+                ${link.LABEL}
+                ${link.SHOW_BADGE === 'Yes' ? `<span class="nav-badge" style="background: ${link.BADGE_COLOR}">${link.BADGE_TEXT}</span>` : ''}
+            </a>
+        `).join('');
+    }
+}
+
+// ===== FOOTER PAGES =====
+function loadFooterPages() {
+    const footerPages = cms.getFooterPages();
+    const footerContainer = document.querySelector('.footer-links');
+    if (footerContainer) {
+        footerContainer.innerHTML = footerPages.map(page => `
+            <a href="#/page/${page.SLUG}" class="footer-link" onclick="loadPage('${page.SLUG}'); return false;">${page.TITLE}</a>
+        `).join('');
+    }
+}
+
+// ===== SOCIAL LINKS =====
+function loadSocialLinks() {
+    const socialLinks = cms.getSocialLinks();
+    const socialContainer = document.querySelector('.social-links');
+    if (socialContainer) {
+        socialContainer.innerHTML = socialLinks.map(link => `
+            <a href="${link.URL}" class="social-link" target="_blank" title="${link.LABEL}">
+                <i class="fab ${link.ICON}"></i>
+            </a>
+        `).join('');
+    }
+}
+
+// ===== PAGE LOADER (NEW) =====
+function loadPage(slug) {
+    const page = cms.getPageBySlug(slug);
+    if (!page) {
+        showToast('Page not found!', 'error');
+        return;
+    }
+
+    // Update page title
+    document.title = page.META_TITLE || page.TITLE;
+
+    // Update meta tags
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.content = page.META_DESC || '';
+
+    // Load page content
+    const contentContainer = document.querySelector('.page-content') || document.querySelector('main');
+    if (contentContainer) {
+        contentContainer.innerHTML = `
+            <div class="page-banner" style="background: ${page.BANNER_IMAGE ? `url(${page.BANNER_IMAGE})` : 'linear-gradient(135deg, #6366f1, #ec4899)'}; background-size: cover;">
+                <div class="page-banner-overlay">
+                    <h1>${page.TITLE}</h1>
+                </div>
+            </div>
+            <div class="page-body">
+                ${page.CONTENT}
+            </div>
+        `;
+    }
+
+    // Update URL hash
+    window.location.hash = `/page/${slug}`;
+
+    // Scroll to top
+    window.scrollTo(0, 0);
+}
+
+// ===== HERO SLIDES =====
+function loadHeroSlides() {
+    const slides = cms.getActiveHeroSlides();
+    const container = document.querySelector('.hero-slider');
+    if (!container || slides.length === 0) return;
+
+    container.innerHTML = slides.map((slide, index) => `
+        <div class="hero-slide ${index === 0 ? 'active' : ''}" data-index="${index}">
+            <img src="${slide.IMAGE}" alt="${slide.TITLE}" class="hero-slide-bg">
+            <div class="hero-slide-overlay"></div>
+            <div class="hero-slide-content">
+                <div class="hero-slide-text">
+                    <span class="hero-tag"><i class="fas fa-star"></i> ${slide.TAG}</span>
+                    <h1 class="hero-title">${slide.TITLE}</h1>
+                    <p class="hero-description">${slide.DESCRIPTION}</p>
+                    <div class="hero-price">
+                        ${slide.PRICE_CURRENT ? `<span class="hero-price-current">${cms.formatPrice(slide.PRICE_CURRENT)}</span>` : ''}
+                        ${slide.PRICE_ORIGINAL ? `<span class="hero-price-original">${cms.formatPrice(slide.PRICE_ORIGINAL)}</span>` : ''}
+                        ${slide.DISCOUNT ? `<span class="hero-price-discount">-${slide.DISCOUNT}%</span>` : ''}
+                    </div>
+                    <div class="hero-buttons">
+                        <a href="${slide.BUTTON_LINK}" class="hero-btn-primary">${slide.BUTTON_TEXT} <i class="fas fa-arrow-right"></i></a>
+                        <a href="${slide.PRODUCT_LINK}" class="hero-btn-secondary">View Details <i class="fas fa-eye"></i></a>
+                    </div>
+                </div>
+                <div class="hero-slide-image">
+                    <img src="${slide.IMAGE}" alt="${slide.TITLE}">
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ===== CATEGORIES =====
+function loadCategories() {
+    const categories = cms.getHomepageCategories();
+    const container = document.querySelector('.categories-grid');
+    if (!container) return;
+
+    container.innerHTML = categories.map(cat => `
+        <div class="category-card ${cat.SLUG}">
+            <div class="category-icon"><i class="fas ${cat.ICON}"></i></div>
+            <h3 class="category-name">${cat.NAME}</h3>
+            <p class="category-count">${cat.PRODUCT_COUNT}+ Products</p>
+        </div>
+    `).join('');
+}
+
+// ===== PRODUCTS =====
+function loadProducts() {
+    const products = cms.getFeaturedProducts().slice(0, 8);
+    const container = document.querySelector('.products-grid');
+    if (!container) return;
+
+    container.innerHTML = products.map(product => `
+        <div class="product-card" data-id="${product.ID}">
             <div class="product-image-wrapper">
-                <img src="${product.image}" alt="${product.name}" class="product-image" loading="lazy">
-                ${product.badge ? `<div class="product-badges"><span class="badge badge-${product.badge.toLowerCase()}">${product.badge}</span></div>` : ''}
+                <img src="${product.IMAGE}" alt="${product.NAME}" class="product-image">
+                ${product.BADGE ? `<div class="product-badges"><span class="badge badge-${product.BADGE.toLowerCase()}">${product.BADGE}</span></div>` : ''}
                 <div class="product-actions">
-                    <button class="product-action-btn" onclick="quickView(${product.id})" title="Quick View"><i class="fas fa-eye"></i></button>
-                    <button class="product-action-btn" onclick="addToWishlist(${product.id})" title="Add to Wishlist"><i class="far fa-heart"></i></button>
-                    <button class="product-action-btn" onclick="compareProduct(${product.id})" title="Compare"><i class="fas fa-exchange-alt"></i></button>
+                    <button class="product-action-btn" onclick="addToWishlist(${product.ID})"><i class="fas fa-heart"></i></button>
+                    <button class="product-action-btn" onclick="quickView(${product.ID})"><i class="fas fa-eye"></i></button>
+                    <button class="product-action-btn" onclick="addToCompare(${product.ID})"><i class="fas fa-exchange-alt"></i></button>
                 </div>
             </div>
             <div class="product-info">
-                <div class="product-category">${product.category}</div>
-                <h3 class="product-name"><a href="#">${product.name}</a></h3>
+                <p class="product-category">${product.CATEGORY}</p>
+                <h3 class="product-name"><a href="/product/${product.SLUG}">${product.NAME}</a></h3>
                 <div class="product-rating">
-                    <span class="stars">${stars}</span>
-                    <span class="rating-count">(${product.rating})</span>
+                    <div class="stars">${'★'.repeat(Math.floor(product.RATING))}${'☆'.repeat(5 - Math.floor(product.RATING))}</div>
+                    <span class="rating-count">(${product.REVIEWS} reviews)</span>
                 </div>
                 <div class="product-price">
-                    <span class="price-current">৳${product.price.toLocaleString()}</span>
-                    <span class="price-original">৳${product.original_price.toLocaleString()}</span>
-                    ${discount > 0 ? `<span class="price-discount">-${discount}%</span>` : ''}
+                    <span class="price-current">${cms.formatPrice(product.PRICE)}</span>
+                    ${product.ORIGINAL_PRICE ? `<span class="price-original">${cms.formatPrice(product.ORIGINAL_PRICE)}</span>` : ''}
+                    ${product.DISCOUNT ? `<span class="price-discount">-${product.DISCOUNT}%</span>` : ''}
                 </div>
-                <div class="product-stock">
-                    <i class="fas ${product.stock <= 5 ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i>
-                    <span>${product.stock <= 5 ? `শুধু ${product.stock}টি বাকি!` : `${product.stock}টি স্টকে`}</span>
-                    <div class="stock-progress">
-                        <div class="stock-progress-bar ${stockClass}" style="width: ${stockPercent}%"></div>
-                    </div>
+                <div class="product-stock ${product.STOCK < 10 ? 'low' : ''}">
+                    <i class="fas fa-check-circle"></i> ${product.STOCK < 10 ? `Only ${product.STOCK} left!` : 'In Stock'}
+                    <div class="stock-progress"><div class="stock-progress-bar ${product.STOCK < 10 ? 'low' : ''}" style="width: ${Math.min(100, (product.STOCK / 50) * 100)}%"></div></div>
                 </div>
-                <button class="add-to-cart" onclick="addToCart(${product.id})">
-                    <i class="fas fa-cart-plus"></i> কার্টে যোগ করুন
+                <button class="add-to-cart" onclick="addToCart(${product.ID})">
+                    <i class="fas fa-shopping-cart"></i> Add to Cart
                 </button>
             </div>
         </div>
-    `;
+    `).join('');
 }
 
-// Render Sections
-function renderFeaturedProducts() {
-    const container = document.getElementById('featuredProducts');
+// ===== PROMO BANNERS =====
+function loadPromoBanners() {
+    const banners = cms.getActivePromoBanners();
+    const container = document.querySelector('.promo-banners');
     if (!container) return;
-    container.innerHTML = products.slice(0, 8).map(createProductCard).join('');
+
+    container.innerHTML = banners.map(banner => `
+        <div class="promo-banner ${banner.ID === 1 ? 'promo-banner-large' : ''}">
+            <img src="${banner.IMAGE}" alt="${banner.TITLE}">
+            <div class="promo-banner-overlay">
+                <span class="promo-banner-tag">${banner.SUBTITLE}</span>
+                <h3 class="promo-banner-title">${banner.TITLE}</h3>
+                <p class="promo-banner-desc">${banner.DESCRIPTION}</p>
+                <a href="${banner.BUTTON_LINK}" class="promo-banner-btn">${banner.BUTTON_TEXT} <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    `).join('');
 }
 
-function renderFlashSaleProducts() {
-    const container = document.getElementById('flashSaleProducts');
+// ===== TESTIMONIALS =====
+function loadTestimonials() {
+    const testimonials = cms.getActiveTestimonials();
+    const container = document.querySelector('.testimonials-grid');
     if (!container) return;
-    const saleProducts = products.filter(p => p.badge === 'Sale' || p.badge === 'Hot');
-    container.innerHTML = saleProducts.slice(0, 5).map(createProductCard).join('');
-}
 
-function renderNewArrivals() {
-    const container = document.getElementById('newArrivals');
-    if (!container) return;
-    const newProducts = products.filter(p => p.badge === 'New');
-    container.innerHTML = newProducts.slice(0, 5).map(createProductCard).join('');
-}
-
-// Slider
-function initSlider() {
-    const slides = document.querySelectorAll('.hero-slide');
-    if (slides.length === 0) return;
-
-    function showSlide(index) {
-        slides.forEach((slide, i) => {
-            slide.classList.toggle('active', i === index);
-        });
-        document.querySelectorAll('.slider-dot').forEach((dot, i) => {
-            dot.classList.toggle('active', i === index);
-        });
-        currentSlide = index;
-        resetProgress();
-    }
-
-    window.nextSlide = () => showSlide((currentSlide + 1) % slides.length);
-    window.prevSlide = () => showSlide((currentSlide - 1 + slides.length) % slides.length);
-    window.goToSlide = (index) => showSlide(index);
-
-    function resetProgress() {
-        const progress = document.getElementById('sliderProgress');
-        if (!progress) return;
-        progress.style.transition = 'none';
-        progress.style.width = '0%';
-        setTimeout(() => {
-            progress.style.transition = 'width 5s linear';
-            progress.style.width = '100%';
-        }, 50);
-    }
-
-    slideInterval = setInterval(nextSlide, 5000);
-    resetProgress();
-
-    const slider = document.getElementById('heroSlider');
-    if (slider) {
-        slider.addEventListener('mouseenter', () => clearInterval(slideInterval));
-        slider.addEventListener('mouseleave', () => {
-            slideInterval = setInterval(nextSlide, 5000);
-        });
-    }
-}
-
-// Countdown Timer
-function initCountdown() {
-    let hours = 2, minutes = 30, seconds = 45;
-
-    countdownInterval = setInterval(() => {
-        seconds--;
-        if (seconds < 0) { seconds = 59; minutes--; }
-        if (minutes < 0) { minutes = 59; hours--; }
-        if (hours < 0) { hours = 23; minutes = 59; seconds = 59; }
-
-        const h = document.getElementById('hours');
-        const m = document.getElementById('minutes');
-        const s = document.getElementById('seconds');
-
-        if (h) h.textContent = String(hours).padStart(2, '0');
-        if (m) m.textContent = String(minutes).padStart(2, '0');
-        if (s) s.textContent = String(seconds).padStart(2, '0');
-    }, 1000);
-}
-
-// Cart Functions
-function addToCart(productId) {
-    const product = products.find(p => p.id === productId);
-    if (!product) return;
-
-    const existingItem = cart.find(item => item.id === productId);
-    if (existingItem) {
-        if (existingItem.quantity < product.stock) {
-            existingItem.quantity++;
-        } else {
-            showToast('দুঃখিত, স্টক শেষ!', 'error');
-            return;
-        }
-    } else {
-        cart.push({ id: product.id, name: product.name, price: product.price, image: product.image, quantity: 1, stock: product.stock });
-    }
-
-    saveCart();
-    updateCartUI();
-    showToast(`${product.name} কার্টে যোগ হয়েছে!`);
-}
-
-function removeFromCart(productId) {
-    cart = cart.filter(item => item.id !== productId);
-    saveCart();
-    updateCartUI();
-}
-
-function updateQuantity(productId, change) {
-    const item = cart.find(item => item.id === productId);
-    if (!item) return;
-
-    const newQuantity = item.quantity + change;
-    if (newQuantity <= 0) { removeFromCart(productId); return; }
-    if (newQuantity > item.stock) { showToast('স্টকে এতোটি পণ্য নেই!', 'error'); return; }
-
-    item.quantity = newQuantity;
-    saveCart();
-    updateCartUI();
-}
-
-function saveCart() {
-    localStorage.setItem('shopease_cart', JSON.stringify(cart));
-}
-
-function updateCartUI() {
-    const cartCount = document.getElementById('cartCount');
-    const cartTotalHeader = document.getElementById('cartTotalHeader');
-    const cartItems = document.getElementById('cartItems');
-    const cartSubtotal = document.getElementById('cartSubtotal');
-    const cartTotal = document.getElementById('cartTotal');
-
-    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-
-    if (cartCount) cartCount.textContent = totalItems;
-    if (cartTotalHeader) cartTotalHeader.textContent = totalPrice.toLocaleString();
-    if (cartSubtotal) cartSubtotal.textContent = '৳' + totalPrice.toLocaleString();
-    if (cartTotal) cartTotal.textContent = '৳' + totalPrice.toLocaleString();
-
-    if (cartItems) {
-        if (cart.length === 0) {
-            cartItems.innerHTML = `
-                <div class="cart-empty">
-                    <i class="fas fa-shopping-basket"></i>
-                    <h3>কার্ট খালি</h3>
-                    <p>কিছু প্রোডাক্ট যোগ করুন</p>
-                </div>`;
-        } else {
-            cartItems.innerHTML = cart.map(item => `
-                <div class="cart-item">
-                    <img src="${item.image}" alt="${item.name}">
-                    <div class="cart-item-info">
-                        <div class="cart-item-name">${item.name}</div>
-                        <div class="cart-item-price">৳${item.price.toLocaleString()}</div>
-                        <div class="quantity-control">
-                            <button class="qty-btn" onclick="updateQuantity(${item.id}, -1)"><i class="fas fa-minus"></i></button>
-                            <span class="qty-value">${item.quantity}</span>
-                            <button class="qty-btn" onclick="updateQuantity(${item.id}, 1)"><i class="fas fa-plus"></i></button>
-                        </div>
-                    </div>
-                    <button class="remove-item" onclick="removeFromCart(${item.id})"><i class="fas fa-trash"></i></button>
+    container.innerHTML = testimonials.map(t => `
+        <div class="testimonial-card">
+            <div class="testimonial-quote">"</div>
+            <p class="testimonial-text">${t.REVIEW}</p>
+            <div class="testimonial-author">
+                <img src="${t.AVATAR}" alt="${t.NAME}">
+                <div class="testimonial-author-info">
+                    <h4>${t.NAME}</h4>
+                    <p>${t.LOCATION}</p>
                 </div>
-            `).join('');
-        }
-    }
+                <div class="testimonial-rating">${'★'.repeat(t.RATING)}${'☆'.repeat(5 - t.RATING)}</div>
+            </div>
+        </div>
+    `).join('');
 }
 
-function toggleCart() {
-    document.getElementById('cartOverlay').classList.toggle('active');
-    document.getElementById('cartSidebar').classList.toggle('active');
+// ===== CART FUNCTIONS =====
+function addToCart(productId, quantity = 1) {
+    const product = cms.getProductById(productId);
+    if (!product) return;
+    showToast('Product added to cart!', 'success');
+    updateCartCount();
 }
 
-function checkout() {
-    if (cart.length === 0) { showToast('কার্ট খালি!', 'error'); return; }
-    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    alert(`🎉 অর্ডার সফল!\n\nমোট: ৳${total.toLocaleString()}\n\nধন্যবাদ আমাদের সাথে শপিং করার জন্য!`);
-    cart = [];
-    saveCart();
-    updateCartUI();
-    toggleCart();
+function addToWishlist(productId) {
+    showToast('Added to wishlist!', 'success');
 }
 
-// Toast Notifications
-function showToast(message, type = 'success') {
-    const container = document.getElementById('toastContainer');
-    if (!container) return;
+function quickView(productId) {
+    const product = cms.getProductById(productId);
+    if (!product) return;
+    console.log('Quick view:', product);
+}
 
+function updateCartCount() {
+    // Update cart badge count
+}
+
+// ===== TOAST NOTIFICATIONS =====
+function showToast(message, type = 'info') {
+    const container = document.querySelector('.toast-container') || createToastContainer();
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
     toast.innerHTML = `
-        <div class="toast-icon"><i class="fas ${type === 'error' ? 'fa-exclamation-circle' : type === 'warning' ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i></div>
-        <div class="toast-content"><h4>${type === 'error' ? 'ত্রুটি!' : type === 'warning' ? 'সতর্কতা!' : 'সফল!'}</h4><p>${message}</p></div>
+        <div class="toast-icon"><i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'times' : 'info'}"></i></div>
+        <div class="toast-content"><h4>${type.charAt(0).toUpperCase() + type.slice(1)}</h4><p>${message}</p></div>
         <button class="toast-close" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
     `;
-
     container.appendChild(toast);
     setTimeout(() => toast.classList.add('show'), 10);
-    setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 400); }, 3000);
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 400);
+    }, 3000);
 }
 
-// Scroll Effects
-function initScrollEffects() {
-    const backToTop = document.getElementById('backToTop');
-    const header = document.querySelector('.main-header');
-
-    window.addEventListener('scroll', () => {
-        if (backToTop) {
-            backToTop.classList.toggle('visible', window.scrollY > 500);
-        }
-        if (header) {
-            header.classList.toggle('header-scrolled', window.scrollY > 100);
-        }
-    });
+function createToastContainer() {
+    const container = document.createElement('div');
+    container.className = 'toast-container';
+    document.body.appendChild(container);
+    return container;
 }
 
-function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+// ===== SEARCH =====
+function searchProducts(query) {
+    const q = query.toLowerCase();
+    return cms.getActiveProducts().filter(p => 
+        p.NAME.toLowerCase().includes(q) ||
+        p.DESCRIPTION.toLowerCase().includes(q) ||
+        p.CATEGORY.toLowerCase().includes(q) ||
+        p.TAGS.toLowerCase().includes(q)
+    );
 }
 
-// Mobile Menu
-function toggleMobileMenu() {
-    document.getElementById('navLinks').classList.toggle('active');
-}
-
-function toggleMegaMenu() {
-    // Mega menu toggle for mobile
-}
-
-// Quick View
-function quickView(productId) {
-    const product = products.find(p => p.id === productId);
-    if (!product) return;
-    showToast(`${product.name} - কুইক ভিউ আসছে!`);
-}
-
-// Wishlist
-function addToWishlist(productId) {
-    showToast('উইশলিস্টে যোগ হয়েছে!');
-}
-
-// Compare
-function compareProduct(productId) {
-    showToast('কম্পেয়ার লিস্টে যোগ হয়েছে!');
-}
-
-// Search
-document.getElementById('searchInput')?.addEventListener('input', function() {
-    // Search functionality
-});
+// ===== EXPORT FOR USE IN OTHER SCRIPTS =====
+window.ShopEaseCMS = ShopEaseCMS;
+window.cms = cms;
+window.loadPage = loadPage;
